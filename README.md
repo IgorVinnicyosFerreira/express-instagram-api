@@ -1,2 +1,2 @@
 # nodejs-instagram-api
-Api written in node.js for clone instagram app
+Api written in node.js/express for clone instagram app
