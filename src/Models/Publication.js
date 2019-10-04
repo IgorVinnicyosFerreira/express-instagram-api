@@ -11,7 +11,8 @@ const publication = new Schema(
     location: String,
     media: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'File',
         required: true
       }
     ],

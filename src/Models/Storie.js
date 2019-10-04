@@ -12,7 +12,8 @@ const storie = new Schema(
       default: false
     },
     media: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'File',
       required: true
     }
   },

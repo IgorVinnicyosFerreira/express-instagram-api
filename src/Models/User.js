@@ -5,12 +5,21 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  avatar: String,
-  nickName: {
+  avatar: {
+    type: Schema.Types.ObjectId,
+    ref: 'File'
+  },
+  genre: {
+    type: Number,
+    required: true
+  },
+  username: {
     type: String,
     required: true
   },
-  birthDay: {
+  email: String,
+  phone: String,
+  birthday: {
     type: Date,
     required: true
   },
