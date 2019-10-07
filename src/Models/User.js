@@ -23,7 +23,7 @@ const userSchema = new Schema({
     type: Date,
     required: true
   },
-  description: String,
+  bio: String,
   followers: [
     {
       type: Schema.Types.ObjectId,

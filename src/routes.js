@@ -9,13 +9,17 @@ const AccessController = require('./controllers/Access');
 const AvatarController = require('./controllers/Avatar');
 
 router.post('/login', AccessController.login);
-router.post('/user/create', UserController.create, AccessController.create);
+
+router.post('/users', JwtAuthentication, UserController.create, AccessController.create);
+router.get('/users/:id', JwtAuthentication, UserController.get);
+router.patch('/users', JwtAuthentication, UserController.update);
+
 router.post(
-  '/avatar/save',
+  '/avatars',
   JwtAuthentication,
   multer(multerConfig).single('avatar'),
   AvatarController.save
 );
-router.get('/avatar', JwtAuthentication, AvatarController.get);
+router.get('/avatars', JwtAuthentication, AvatarController.get);
 
 module.exports = router;

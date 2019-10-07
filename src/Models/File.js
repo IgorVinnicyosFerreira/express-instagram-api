@@ -23,8 +23,10 @@ file.virtual('url').get(function() {
 
 file.pre('remove', function(next) {
 
-  const url = path.resolve(__dirname, '..', '..', 'tmp', this.path);
-  fs.unlinkSync(url)
+  const directory = path.resolve(__dirname, '..', '..', 'tmp', this.path);
+  
+  fs.unlinkSync(directory);
+
   next();
 });
 
