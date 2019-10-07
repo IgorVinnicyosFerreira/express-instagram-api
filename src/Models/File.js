@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const fs = require('fs');
+const path = require('path');
 
 const file = new Schema(
   {
@@ -21,8 +22,9 @@ file.virtual('url').get(function() {
 });
 
 file.pre('remove', function(next) {
-  console.log('pre delete');
-  fs.unlinkSync(this.url);
+
+  const url = path.resolve(__dirname, '..', '..', 'tmp', this.path);
+  fs.unlinkSync(url)
   next();
 });
 

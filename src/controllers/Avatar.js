@@ -13,10 +13,10 @@ module.exports = {
     try {
       if (!request.file) throw 'Arquivo não informado';
 
-      const user = await UserModel.findById(request.user._id);
+      const user = await UserModel.findById(request.user._id).populate('avatar');
 
       if (user.avatar) {
-        await FileModel.deleteOne({ _id: user.avatar });
+        await user.avatar.remove();
       }
 
       const file = await FileModel.create({ path: request.file.key });
