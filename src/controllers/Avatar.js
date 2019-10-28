@@ -9,7 +9,7 @@ module.exports = {
     return response.json(user.avatar);
   },
 
-  async save(request, response) {
+  async create(request, response) {
     try {
       if (!request.file) throw 'Arquivo não informado';
 
@@ -26,6 +26,21 @@ module.exports = {
       await user.save();
 
       return response.json(file);
+    } catch (exc) {
+      return response.status(400).json({ error: exc });
+    }
+  },
+
+  async delete(request, response) {
+    try {
+      const user = await UserModel.findById(request.user._id).populate('avatar');
+
+      await user.avatar.remove();
+
+      user.avatar = undefined;
+      await user.save();
+
+      return response.json({ success: true });
     } catch (exc) {
       return response.status(400).json({ error: exc });
     }

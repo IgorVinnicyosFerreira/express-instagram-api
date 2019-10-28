@@ -36,10 +36,10 @@ const userSchema = new Schema({
       ref: 'User'
     }
   ],
-  publications: [
+  posts: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Publication'
+      ref: 'Post'
     }
   ],
   stories: [
