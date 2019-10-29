@@ -8,6 +8,7 @@ const UserController = require('./controllers/User');
 const AccessController = require('./controllers/Access');
 const AvatarController = require('./controllers/Avatar');
 const PostController = require('./controllers/Post');
+const FollowingController = require('./controllers/Following');
 
 const multerInstance = multer(multerConfig);
 
@@ -31,5 +32,9 @@ router.post('/posts', JwtAuthentication, multerInstance.array('media'), PostCont
 router.get('/posts/:id', JwtAuthentication, PostController.get);
 router.get('/posts', JwtAuthentication, PostController.index);
 router.delete('/posts/:id', JwtAuthentication, PostController.delete);
+
+router.post('/followings/:userIdToFollow', JwtAuthentication, FollowingController.create);
+router.delete('/followings/:userIdToUnfollow', JwtAuthentication, FollowingController.delete);
+router.get('/followings', JwtAuthentication, FollowingController.index);
 
 module.exports = router;
