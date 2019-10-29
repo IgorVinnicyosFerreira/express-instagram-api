@@ -7,7 +7,7 @@ module.exports = {
         const { searchTerm, page } = request.query;
 
         try {          
-            const pageSize = 2;
+            const pageSize = 10;
 
             const searchQuery = searchTerm
             ? {
