@@ -11,6 +11,7 @@ const PostController = require('./controllers/Post');
 const FollowingController = require('./controllers/Following');
 const FollowerController = require('./controllers/Follower');
 const FeedController = require('./controllers/Feed');
+const CommentController = require('./controllers/Comment');
 
 const multerInstance = multer(multerConfig);
 
@@ -42,5 +43,7 @@ router.get('/followings', JwtAuthentication, FollowingController.index);
 router.get('/followers', JwtAuthentication, FollowerController.index);
 
 router.get('/feed', JwtAuthentication, FeedController.index);
+
+router.post('/comments/:postId', JwtAuthentication, CommentController.create);
 
 module.exports = router;
