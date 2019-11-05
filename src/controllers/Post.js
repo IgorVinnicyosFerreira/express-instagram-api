@@ -1,5 +1,6 @@
 const PostModel = require('../models/Post');
 const FileModel = require('../models/File');
+const error = require('../util/Error');
 
 module.exports = {
 
@@ -17,7 +18,7 @@ module.exports = {
 
       return response.json(postList);
     } catch (exc) {
-      return response.status(400).json({ error: exc.message });
+      return response.status(500).json(error(exc.message));
     }
   },
 
@@ -29,7 +30,7 @@ module.exports = {
 
       return response.json(post);
     } catch (exc) {
-      return response.status(400).json({ error: exc });
+      return response.status(500).json(error(exc.message));
     }
   },
 
@@ -58,10 +59,8 @@ module.exports = {
           return response.json({ success: true, post });
         };
       });
-
-
     } catch (exc) {
-      return response.status(400).json({ error: exc.message });
+      return response.status(500).json(error(exc.message));
     }
   },
 
@@ -79,9 +78,8 @@ module.exports = {
       });
 
       return response.json({ success: true });
-
     } catch (exc) {
-      return response.status(400).json({ error: exc.message });
+      return response.status(500).json(error(exc.message));
     }
   }
 };

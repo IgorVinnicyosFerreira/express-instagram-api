@@ -2,6 +2,7 @@ const AccessModel = require('../models/Access');
 const UserModel = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const error = require('../util/Error');
 
 module.exports = {
   async login(request, response) {
@@ -10,21 +11,21 @@ module.exports = {
     try {
       const user = await UserModel.findOne({ username });
 
-      if (!user) throw 'Username inválido';
+      if (!user)
+        return response.status(400).json(error('Username inválido', 'username'));
 
-      const access = await AccessModel.findOne({
-        user
-      });
+      const access = await AccessModel.findOne({ user });
 
       const validPassword = await bcrypt.compare(`${password}`, access.password);
 
-      if (!validPassword) throw 'Senha inválida';
+      if (!validPassword)
+        response.status(400).json(error('Senha inválida', 'password'));
 
       const token = await jwt.sign({ _id: user._id, username }, process.env.SECRET);
 
       return response.header('authorization', token).json(user);
     } catch (exc) {
-      return response.status(400).json({ error: exc });
+      return response.status(500).json(error(exc.message));
     }
   },
 
@@ -42,7 +43,7 @@ module.exports = {
     } catch (exc) {
       await UserModel.deleteOne({ _id: user._id });
 
-      return response.status(400).json({ error: exc });
+      return response.status(500).json(error(exc.message));
     }
   }
 };

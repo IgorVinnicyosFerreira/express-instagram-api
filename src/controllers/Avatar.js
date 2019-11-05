@@ -1,6 +1,6 @@
 const UserModel = require('../models/User');
 const FileModel = require('../models/File');
-const fs = require('fs');
+const error = require('../util/Error');
 
 module.exports = {
   async get(request, response) {
@@ -11,7 +11,8 @@ module.exports = {
 
   async create(request, response) {
     try {
-      if (!request.file) throw 'Arquivo não informado';
+      if (!request.file)
+        return response.status(400).json(error('Arquivo não informado', 'file'));
 
       const user = await UserModel.findById(request.user._id).populate('avatar');
 
@@ -27,7 +28,7 @@ module.exports = {
 
       return response.json(file);
     } catch (exc) {
-      return response.status(400).json({ error: exc });
+      return response.status(500).json(error(exc.message));
     }
   },
 
@@ -42,7 +43,7 @@ module.exports = {
 
       return response.json({ success: true });
     } catch (exc) {
-      return response.status(400).json({ error: exc });
+      return response.status(500).json(error(exc.message));
     }
   }
 };
