@@ -44,6 +44,8 @@ router.get('/followers', JwtAuthentication, FollowerController.index);
 
 router.get('/feed', JwtAuthentication, FeedController.index);
 
-router.post('/comments/:postId', JwtAuthentication, CommentController.create);
+router.post('/posts/:postId/comments/', JwtAuthentication, CommentController.create);
+router.get('/posts/:postId/comments', JwtAuthentication, CommentController.index);
+router.delete('/posts/:postId/comments/:commentId', JwtAuthentication, CommentController.delete);
 
 module.exports = router;
