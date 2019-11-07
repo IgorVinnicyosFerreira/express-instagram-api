@@ -13,6 +13,7 @@ const FollowerController = require('./controllers/Follower');
 const FeedController = require('./controllers/Feed');
 const CommentController = require('./controllers/Comment');
 const ReplyController = require('./controllers/Reply');
+const StorieController = require('./controllers/Stories');
 
 const multerInstance = multer(multerConfig);
 
@@ -52,5 +53,9 @@ router.delete('/posts/:postId/comments/:commentId', JwtAuthentication, CommentCo
 router.post('/comments/:commentId/replies', JwtAuthentication, ReplyController.create);
 router.get('/comments/:commentId/replies', JwtAuthentication, ReplyController.index);
 router.delete('/comments/:commentId/replies/:replyId', JwtAuthentication, ReplyController.delete);
+
+router.post('/stories', JwtAuthentication, multerInstance.single('media'), StorieController.create);
+router.get('/stories', JwtAuthentication, StorieController.index);
+router.delete('/stories/:storiesId', JwtAuthentication, StorieController.delete);
 
 module.exports = router;
