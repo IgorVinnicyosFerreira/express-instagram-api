@@ -15,7 +15,7 @@ module.exports = {
                     path: 'comments',
                     options: {
                         skip: (pageSize * page) - pageSize,
-                        sort: { username: 1 },
+                        sort: { createdAt: -1 },
                         limit: pageSize
                     }
                 }
@@ -69,7 +69,7 @@ module.exports = {
 
             return response.json({ success: true })
         } catch (exc) {
-
+            return response.status(500).json(error(exc.message));
         }
     }
 
