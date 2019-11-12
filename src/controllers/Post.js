@@ -3,17 +3,15 @@ const FileModel = require('../models/File');
 const error = require('../util/Error');
 
 module.exports = {
-
   async index(request, response) {
     const page = request.query.page || 1;
     const pageSize = 15;
 
     try {
-      const postList = await PostModel
-        .find()
+      const postList = await PostModel.find()
         .sort({ createdAt: -1 })
         .populate('media')
-        .skip((pageSize * page) - pageSize)
+        .skip(pageSize * page - pageSize)
         .limit(pageSize);
 
       return response.json(postList);
@@ -40,7 +38,6 @@ module.exports = {
     const userId = request.user._id;
 
     try {
-
       const post = new PostModel({
         author: userId,
         description,
@@ -49,7 +46,6 @@ module.exports = {
         noComments
       });
 
-
       files.forEach(async ({ key }, index) => {
         const file = await FileModel.create({ path: key });
         post.media.push(file);
@@ -57,7 +53,7 @@ module.exports = {
         if (index + 1 === files.length) {
           await post.save();
           return response.json({ success: true, post });
-        };
+        }
       });
     } catch (exc) {
       return response.status(500).json(error(exc.message));
@@ -73,8 +69,7 @@ module.exports = {
       post.media.forEach(async (file, index) => {
         await file.remove();
 
-        if (index + 1 === post.media.length)
-          post.remove();
+        if (index + 1 === post.media.length) post.remove();
       });
 
       return response.json({ success: true });

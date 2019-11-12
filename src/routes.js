@@ -14,6 +14,8 @@ const FeedController = require('./controllers/Feed');
 const CommentController = require('./controllers/Comment');
 const ReplyController = require('./controllers/Reply');
 const StorieController = require('./controllers/Stories');
+const LikePostController = require('./controllers/LikePost');
+const LikeCommentController = require('./controllers/LikeComment');
 
 const multerInstance = multer(multerConfig);
 
@@ -57,5 +59,13 @@ router.delete('/comments/:commentId/replies/:replyId', JwtAuthentication, ReplyC
 router.post('/stories', JwtAuthentication, multerInstance.single('media'), StorieController.create);
 router.get('/stories', JwtAuthentication, StorieController.index);
 router.delete('/stories/:storiesId', JwtAuthentication, StorieController.delete);
+
+router.post('/posts/:postId/likes', JwtAuthentication, LikePostController.create);
+router.delete('/posts/:postId/likes', JwtAuthentication, LikePostController.delete);
+router.get('/posts/:postId/likes', JwtAuthentication, LikePostController.index);
+
+router.post('/comments/:commentId/likes', JwtAuthentication, LikeCommentController.create);
+router.delete('/comments/:commentId/likes', JwtAuthentication, LikeCommentController.delete);
+router.get('/comments/:commentId/likes', JwtAuthentication, LikeCommentController.index);
 
 module.exports = router;

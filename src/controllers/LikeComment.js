@@ -9,31 +9,43 @@ module.exports = {
 
     try {
       const comment = await CommentModel.findById(commentId).populate({
-        path: 'replies',
+        path: 'likes',
+        select: {
+          name: 1,
+          username: 1,
+          avatar: 1
+        },
         options: {
-          sort: { createdAt: 1 },
+          sort: { username: 1 },
           skip: pageSize * page - pageSize,
           limit: pageSize
+        },
+        populate: {
+          path: 'avatar',
+          select: {
+            url: 1,
+            path: 1
+          }
         }
       });
 
-      return response.json(comment.replies);
+      response.json(comment.likes);
     } catch (exc) {
-      return response.status(500).json({ success: true });
+      return response.status(500).json(error(exc.message));
     }
   },
 
   async create(request, response) {
-    const { commentId } = request.params;
-    const { text } = request.body;
     const userId = request.user._id;
+    const { commentId } = request.params;
 
     try {
       const comment = await CommentModel.findById(commentId);
-      const reply = await CommentModel.create({ text, author: userId });
 
-      comment.replies.push(reply);
-      await comment.save();
+      if (comment.likes.indexOf(userId) === -1) {
+        comment.likes.push(userId);
+        await comment.save();
+      }
 
       return response.json({ success: true });
     } catch (exc) {
@@ -42,14 +54,16 @@ module.exports = {
   },
 
   async delete(request, response) {
-    const { commentId, replyId } = request.params;
+    const userId = request.user._id;
+    const { commentId } = request.params;
 
     try {
       const comment = await CommentModel.findById(commentId);
 
-      comment.replies.pull(replyId);
-      await comment.save();
-      await CommentModel.remove({ _id: replyId });
+      if (comment.likes.indexOf(userId) !== -1) {
+        comment.likes.pull(userId);
+        await comment.save();
+      }
 
       return response.json({ success: true });
     } catch (exc) {

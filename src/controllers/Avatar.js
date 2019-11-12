@@ -11,8 +11,7 @@ module.exports = {
 
   async create(request, response) {
     try {
-      if (!request.file)
-        return response.status(400).json(error('Arquivo não informado', 'file'));
+      if (!request.file) return response.status(400).json(error('Arquivo não informado', 'file'));
 
       const user = await UserModel.findById(request.user._id).populate('avatar');
 

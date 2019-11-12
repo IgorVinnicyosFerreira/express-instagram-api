@@ -11,15 +11,13 @@ module.exports = {
     try {
       const user = await UserModel.findOne({ username });
 
-      if (!user)
-        return response.status(400).json(error('Username inválido', 'username'));
+      if (!user) return response.status(400).json(error('Username inválido', 'username'));
 
       const access = await AccessModel.findOne({ user });
 
       const validPassword = await bcrypt.compare(`${password}`, access.password);
 
-      if (!validPassword)
-        response.status(400).json(error('Senha inválida', 'password'));
+      if (!validPassword) response.status(400).json(error('Senha inválida', 'password'));
 
       const token = await jwt.sign({ _id: user._id, username }, process.env.SECRET);
 
